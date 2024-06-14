@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Student</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Calibri, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Whitish blue background */
+        }
+		.top-bar {
+            background-color: #007bff; /* Blue color */
+            height: 50px;
+            width: 100%;
+			display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+		}
+		.nidhi-logo {
+            margin-right: 20px;
+            font-size: 24px;
+            color: white;
+        }
+		.home-button {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+		
+		.home-button:hover {
+            background-color: #0056b3;
+        }
+		.container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .parent-info {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .details, .adopted-details, .behavior-info {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Register Student</h1>
+    </div>
+    <div class="container">
+	    <a href="php/main_page_index.php" class="home-button"><i class="fas fa-home"></i>Home</a>
+        <form action="php/connect.php" method="post" enctype="multipart/form-data">
+            <!-- Child's Information -->
+            <label for="first_name">Child's First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+
+            <label for="last_name">Child's Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+			
+			<label for="dob">Date of Admission:</label>
+            <input type="date" id="doa" name="doa" required>
+
+            <label for="age">Age:</label>
+            <input type="text" id="age" name="age" readonly>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="contact_number">Contact Number:</label>
+            <input type="text" id="contact_number" name="contact_number" required>
+
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" id="profile_picture" name="profile_picture">
+
+            <!-- Parents Information -->
+            <div class="parent-info">
+                <h2>Parents Information</h2>
+                <label for="mother_name">Mother's Name:</label>
+                <input type="text" id="mother_name" name="mother_name" required>
+
+                <label for="father_name">Father's Name:</label>
+                <input type="text" id="father_name" name="father_name" required>
+
+                <label for="marital_status">Marital Status:</label>
+                <select id="marital_status" name="marital_status">
+                    <option value="married">Married</option>
+                    <option value="single">Single</option>
+                    <option value="divorced">Divorced</option>
+                    <option value="widowed">Widowed</option>
+                </select>
+
+                <label for="education">Education:</label>
+                <input type="text" id="education" name="education">
+
+                <label for="occupation">Occupation:</label>
+                <input type="text" id="occupation" name="occupation">
+            </div>
+
+            <!-- Additional Language Information -->
+            <div class="details">
+                <h2>Additional Language Information</h2>
+                <label for="other_languages">Language(s) spoken in the home other than English:</label>
+                <input type="text" id="other_languages" name="other_languages">
+
+                <label for="dominant_language">What is the dominant language spoken?</label>
+                <input type="text" id="dominant_language" name="dominant_language">
+
+                <label for="understands_language">Does the child understand the language?</label>
+                <input type="text" id="understands_language" name="understands_language">
+
+                <label for="speaks_language">Does the child speak the language?</label>
+                <input type="text" id="speaks_language" name="speaks_language">
+
+                <label for="who_speaks_language">Who speaks the language?</label>
+                <input type="text" id="who_speaks_language" name="who_speaks_language">
+
+                <label for="preferred_language">Which language does the child prefer to speak at home?</label>
+                <input type="text" id="preferred_language" name="preferred_language">
+            </div>
+
+            <!-- Adopted Information -->
+            <div class="adopted-details">
+                <h2>Adopted Information</h2>
+                <label for="adopted">Was the child adopted?</label>
+                <select id="adopted" name="adopted" onchange="toggleAdoptedDetails(this)">
+                    <option value="no" selected>No</option>
+                    <option value="yes">Yes</option>
+                </select>
+
+                <div id="adopted-fields"  style="display: none;">
+                    <label for="adoption_age">At what age?</label>
+                    <input type="text" id="adoption_age" name="adoption_age">
+
+                    <label for="knows_child">Does the child know?</label>
+                    <select id="knows_child" name="knows_child">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Services Information -->
+            <div class="details">
+                <h2>Services Information</h2>
+                <label for="services">Is your child currently availing any educational and/or therapy services?</label>
+                <select id="services" name="services" onchange="toggleDetails(this)">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+
+                <div id="details">
+                    <label for="service_details">Enter Details:</label>
+                    <textarea id="service_details" name="service_details" rows="4"></textarea>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="details">
+                <h2>Additional Information</h2>
+                <label for="reason_for_referral">Reason for Referral:</label>
+                <select id="reason_for_referral" name="reason_for_referral">
+                    <option value="Assessment">Assessment</option>
+                    <option value="Speech Therapy">Speech Therapy</option>
+                    <option value="OT">OT</option>
+                    <option value="Special Education">Special Education</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="current_difficulties">Child's Current Difficulties:</label>
+                <textarea id="current_difficulties" name="current_difficulties" rows="4" required></textarea>
+            </div>
+
+            <!-- General Daily Behavior of Child -->
+            <div class="behavior-info">
+                <h2>General Daily Behavior of Child</h2>
+                <label for="spends_time_with">With whom does the child spend most of his/her time?</label>
+                <input type="text" id="spends_time_with" name="spends_time_with">
+
+                <label for="sleep_well">Does your child sleep well?</label>
+                <select id="sleep_well" name="sleep_well">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="eat_well">Does your child eat well?</label>
+                <select id="eat_well" name="eat_well">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="get_along_with_children">Does your child get along well with other children?</label>
+                <select id="get_along_with_children" name="get_along_with_children">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="get_along_with_adults">Does your child get along well with adults?</label>
+                <select id="get_along_with_adults" name="get_along_with_adults">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="understand_instructions">Can your child understand your instructions?</label>
+                <select id="understand_instructions" name="understand_instructions">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="communicate_with_others">Can your child communicate with others? [using speech/gestures/sounds….]</label>
+                <select id="communicate_with_others" name="communicate_with_others">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="play_with_others">Does your child play with others?</label>
+                <select id="play_with_others" name="play_with_others">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+
+                <label for="play_alone">Does your child play alone?</label>
+                <select id="play_alone" name="play_alone">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <script>
+        // Calculate age based on Date of Birth
+        document.getElementById('dob').addEventListener('change', function() {
+            var dob = new Date(this.value);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var monthDiff = today.getMonth() - dob.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            document.getElementById('age').value = age;
+        });
+
+        // Function to toggle details textarea
+        function toggleDetails(select) {
+            var detailsDiv = document.getElementById('details');
+            if (select.value === 'yes') {
+                detailsDiv.style.display = 'block';
+            } else {
+                detailsDiv.style.display = 'none';
+            }
+        }
+
+        function toggleAdoptedDetails(select) {
+    var adoptedDetailsDiv = document.getElementById('adopted-details');
+    var adoptionFieldsDiv = document.getElementById('adoption-fields');
+
+    if (select.value === 'yes') {
+        adoptedDetailsDiv.style.display = 'block';
+        adoptionFieldsDiv.style.display = 'block'; // Show the fields when "Yes" is selected
+    } else {
+        adoptedDetailsDiv.style.display = 'none';
+        adoptionFieldsDiv.style.display = 'none'; // Hide the fields when "No" is selected
+        // Clear fields when "No" is selected
+        document.getElementById('adoption_age').value = '';
+        document.getElementById('knows_child').value = 'Y'; // Assuming default value is "Yes"
+    }
+}
+	
+
+    </script>
+</body>
+</html>

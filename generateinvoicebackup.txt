@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Invoice</title>
+    <style>
+        /* Add your CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        select, input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Invoice</h1>
+        <form action="process_invoice.php" method="post">
+            <div class="dropdown">
+                <label for="student">Select Student:</label>
+                <select id="student" name="student_id">
+                    <option value="">Select Student</option>
+                    <?php
+                    // Connect to the database
+                    $servername = "localhost";
+                    $username = "root";
+                    $password = "";
+                    $dbname = "test_nidhi";
+
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    // Retrieve student names from the database
+                    $sql = "SELECT student_id, first_name, last_name FROM students";
+                    $result = $conn->query($sql);
+
+                    // Display student names in the dropdown
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row["student_id"] . "'>" . $row["first_name"] . " " . $row["last_name"] . "</option>";
+                        }
+                    } else {
+                        echo "<option value=''>No students found</option>";
+                    }
+
+                    // Close database connection
+                    $conn->close();
+                    ?>
+                </select>
+            </div>
+
+            <label for="invoice_date">Select Invoice Date:</label>
+            <input type="date" id="invoice_date" name="invoice_date" required>
+
+            <div id="therapy-inputs">
+                <label for="therapy">Select Therapy:</label>
+                <select id="therapy" name="therapy[]" multiple>
+                    <option value="">Select Therapy</option>
+                    <?php
+                    // Connect to the database (reuse the existing connection)
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    // Retrieve therapy names and prices from the database
+                    $sql = "SELECT service_description, unit_price FROM therapies";
+                    $result = $conn->query($sql);
+
+                    // Display therapy names and prices in the dropdown
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row["service_description"] . "|" . $row["unit_price"] . "'>" . $row["service_description"] . " ($" . $row["unit_price"] . " per day)</option>";
+                        }
+                    } else {
+                        echo "<option value=''>No therapies found</option>";
+                    }
+
+                    // Close database connection
+                    $conn->close();
+                    ?>
+                </select>
+
+                <label for="days">Number of Days:</label>
+                <input type="number" id="days" name="days[]" min="0">
+            </div>
+
+            <button type="button" onclick="addTherapy()">Add</button>
+            <button type="submit">Generate Invoice</button>
+        </form>
+
+        <table id="therapy-table" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Therapy</th>
+                    <th>Price per Day</th>
+                    <th>Days</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="therapy-body"></tbody>
+        </table>
+
+        <div class="total" id="grand-total" style="display: none;"></div>
+
+        <script>
+            function addTherapy() {
+                var therapySelect = document.getElementById("therapy");
+                var daysInput = document.getElementById("days");
+                var therapyOptions = therapySelect.selectedOptions;
+                var days = daysInput.value;
+
+                var table = document.getElementById("therapy-table");
+                var body = document.getElementById("therapy-body");
+
+                for (var i = 0; i < therapyOptions.length; i++) {
+                    var therapyOption = therapyOptions[i];
+                    var therapy = therapyOption.value;
+                    var therapyParts = therapy.split("|");
+                    var therapyName = therapyParts[0];
+                    var pricePerDay = parseFloat(therapyParts[1]);
+
+                    var row = body.insertRow();
+                    row.insertCell(0).textContent = therapyName;
+                    row.insertCell(1).textContent = "$" + pricePerDay.toFixed(2);
+                    row.insertCell(2).textContent = days;
+                    row.insertCell(3).textContent = "$" + (pricePerDay * days).toFixed(2);
+                }
+
+                table.style.display = "table";
+                document.getElementById("grand-total").style.display = "block";
+
+                calculateTotal();
+            }
+
+            function calculateTotal() {
+                var totalAmount = 0;
+                var rows = document.querySelectorAll("#therapy-body tr");
+                rows.forEach(function(row) {
+                    totalAmount += parseFloat(row.cells[3].textContent.substr(1));
+                });
+
+                document.getElementById("grand-total").innerText = "Grand Total: $" + totalAmount.toFixed(2);
+            }
+        </script>
+    </div>
+</body>
+</html>
